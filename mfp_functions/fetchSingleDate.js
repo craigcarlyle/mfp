@@ -13,14 +13,13 @@ var fetchSingleDate = function(username, date, fields, callback){
   var options = {
     url: url,
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
     }
   };
 
   request(options, function(error, response, body) {
     if (error) throw error;
 
-    var $ = cheerio.load(body);
+    var $ = cheerio.load(JSON.parse(body));
 
     //set results object to store data
     var results = {};
@@ -60,31 +59,30 @@ var fetchSingleDate = function(username, date, fields, callback){
         }
       }
     }
-    
+
     //add date to results object
     results.date = date;
-    
+
     //check to see if water is included
     if (fields == 'all' || fields.includes('water')) {
       var url = helpers.mfpWaterUrl(username, date);
       var options = {
         url: url,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
         }
       };
-    
+
       request(options, function(error, response, body) {
         if (error) throw error;
-    
-        var $ = cheerio.load(body);
+
+        var $ = cheerio.load(JSON.parse(body));
         results['water'] = helpers.convertToNum($('.water-counter p').text());
         callback(results);
       });
     } else {
-  
-      
-  
+
+
+
       callback(results);
     }
   });
