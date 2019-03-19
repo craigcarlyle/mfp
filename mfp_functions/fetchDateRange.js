@@ -21,6 +21,7 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
 
     var dates = [];
     var $tables = [];
+    var $excerciseTables = [];
 
     //for each date encountered, add the date formatted as YYYY-MM-DD and data table
     //to their respective arrays
@@ -28,6 +29,8 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
       var $element = $(element);
       dates.push( helpers.formatDate(new Date($element.text())) );
       $tables.push($element.next('#food'));
+      var exerciseTable = $element.next('#food').length > 0 ? $element.next().next() : $element.next("#excercise");
+      $excerciseTables.push(exerciseTable);
     });
 
     //create a results object
@@ -37,7 +40,7 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
     };
 
     //subroutine that returns the data for a single date
-    var processDate = function(date, $table) {
+    var processDate = function(date, $table, $excerciseTable) {
       //set results object to store data
       var results = {
         nutrition: {},
@@ -59,7 +62,7 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
         if (index !== 0) { cols.nutrition[fieldName] = index; } //ignore first field, which just says "Foods"
       });
 
-      $table.next("#excercise").find('thead').find('tr').find('td').each(function(index, element){
+      $excerciseTable.find('thead').find('tr').find('td').each(function(index, element){
         var $element = $(element);
         var fieldName = $element.text().toLowerCase();
         if (index !== 0) { cols.workouts[fieldName] = index; } //ignore first field, which just says "Foods"
@@ -67,18 +70,21 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
 
       //find row in MFP with nutrient totals
       var $nutritionDataRow = $table.find('tfoot').find('tr');
-      var $workoutsDataRow = $table.next("#excercise").find('tfoot').find('tr');
+      var $workoutsDataRow = $excerciseTable.find('tfoot').find('tr');
 
-      $table.next("#excercise").find("tbody").find('tr:not(.title)').each(function(index, element){
+      console.log("$excerciseTable", $excerciseTable);
+
+      $excerciseTable.find("tbody").find('tr:not(.title)').each(function(index, element){
         var $element = $(element);
 
         if ($element.find("td:first-of-type").text() !== "MFP iOS calorie adjustment") {
-          var exerciseData = {
+          var excerciseData = {
             name: $element.find("td:first-of-type").text(),
             calories: helpers.convertToNum($element.find("td:nth-of-type(2)").text()),
             minutes: helpers.convertToNum($element.find("td:nth-of-type(3)").text())
           }
-          results.workouts.push(exerciseData);
+          console.log("excerciseData", excerciseData)
+          results.workouts.push(excerciseData);
         }
       });
 
@@ -111,7 +117,7 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
 
     //iterate through all dates and push data into a final results object
     for (var i = 0; i < dates.length; i++) {
-      results.data.push( processDate(dates[i], $tables[i]) );
+      results.data.push( processDate(dates[i], $tables[i], $excerciseTables[i]) );
     }
 
     callback( results );
