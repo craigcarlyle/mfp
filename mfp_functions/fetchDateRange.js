@@ -72,8 +72,6 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
       var $nutritionDataRow = $table.find('tfoot').find('tr');
       var $workoutsDataRow = $excerciseTable.find('tfoot').find('tr');
 
-      console.log("$excerciseTable", $excerciseTable);
-
       $excerciseTable.find("tbody").find('tr:not(.title)').each(function(index, element){
         var $element = $(element);
 
@@ -83,7 +81,6 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
             calories: helpers.convertToNum($element.find("td:nth-of-type(2)").text()),
             minutes: helpers.convertToNum($element.find("td:nth-of-type(3)").text())
           }
-          console.log("excerciseData", excerciseData)
           results.workouts.push(excerciseData);
         }
       });
