@@ -45,13 +45,34 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
       var results = {
         nutrition: {},
         workouts: [],
+        caffeine: [],
       };
 
       //define variable for determining columns of fields on MFP page
       var cols = {
         nutrition: {},
         workouts: [],
+        caffeine: [],
       };
+
+      $table.find("td:contains('Coffee')").each(function(index, element) {
+        var cupsOfCoffee = Number($(element).text().charAt(15));
+        if (results.caffeine.coffee) {
+          results.caffeine.coffee += cupsOfCoffee;
+        } else {
+          results.caffeine.coffee = cupsOfCoffee;
+        }
+      });
+
+
+      $table.find("td:contains('Green Tea - Green Tea')").each(function(index, element) {
+        var cupsOfTea = Number($(element).text().charAt(23));
+        if (results.caffeine.tea) {
+          results.caffeine.tea += cupsOfTea;
+        } else {
+          results.caffeine.tea = cupsOfTea;
+        }
+      });
 
       //find and set column numbers of nutrient fields
       $table.find('thead').find('tr').find('td').each(function(index, element){
