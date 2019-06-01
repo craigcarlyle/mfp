@@ -74,6 +74,14 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback){
         }
       });
 
+      $table.find("td:contains('C4')").each(function(index, element) {
+        if (results.caffeine.preworkout) {
+          results.caffeine.preworkout += 1;
+        } else {
+          results.caffeine.preworkout = 1;
+        }
+      });
+
       //find and set column numbers of nutrient fields
       $table.find('thead').find('tr').find('td').each(function(index, element){
         var $element = $(element);
