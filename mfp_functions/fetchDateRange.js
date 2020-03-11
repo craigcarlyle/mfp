@@ -51,7 +51,8 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
           coffee: 0,
           tea: 0,
           preworkout: 0
-        }
+        },
+        creatine: false
       };
 
       //define variable for determining columns of fields on MFP page
@@ -62,7 +63,8 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
           coffee: 0,
           tea: 0,
           preworkout: 0
-        }
+        },
+        creatine: false
       };
 
       $table.find("td:contains('Coffee')").each(function(index, element) {
@@ -99,6 +101,10 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
         } else {
           results.caffeine.preworkout = 1;
         }
+      });
+
+      $table.find("td:contains('Creatine')").each(function(index, element) {
+        results.creatine = true
       });
 
       //find and set column numbers of nutrient fields
