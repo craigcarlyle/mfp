@@ -52,7 +52,8 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
           tea: 0,
           preworkout: 0
         },
-        creatine: false
+        creatine: false,
+        probiotics: {}
       };
 
       //define variable for determining columns of fields on MFP page
@@ -64,7 +65,8 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
           tea: 0,
           preworkout: 0
         },
-        creatine: false
+        creatine: false,
+        probiotics: {}
       };
 
       $table.find("td:contains('Coffee')").each(function(index, element) {
@@ -105,6 +107,10 @@ var fetchDateRange = function(username, startDate, endDate, fields, callback) {
 
       $table.find("td:contains('Creatine')").each(function(index, element) {
         results.creatine = true
+      });
+
+      $table.find("td:contains('Saccharomyces Boulardii')").each(function(index, element) {
+        results.probiotics.saccharomyces = true
       });
 
       //find and set column numbers of nutrient fields
